@@ -1,0 +1,17 @@
+.SiteLayout {
+  min-height: 100vh;
+  margin-left: 200px;
+}
+
+.Header {
+  padding: 0;
+}
+
+.ContentBlock {
+  margin: 24px 16px 0;
+  overflow: initial;
+}
+
+.Footer {
+  text-align: center;
+}
