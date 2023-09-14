@@ -5,7 +5,6 @@ class CustomerService {
   }
 
   addCustomer = async (customer) => {
-    console.log(customer);
     const newCustomer = await Customer.create(customer);
     return newCustomer;
   };
