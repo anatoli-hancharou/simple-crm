@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import { sequelize } from '../db-connection.js';
+import User from './User.js';
 
 const Customer = sequelize.define('Customer', {
   id: {
@@ -30,7 +31,14 @@ const Customer = sequelize.define('Customer', {
   address: {
     type: Sequelize.STRING,
     allowNull: false
-  }
+  },
+  userId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: User,
+      key: 'id',
+    }
+  },
 }, {
   timestamps: false
 });

@@ -10,9 +10,10 @@ class CustomerController {
       status: req.body.status,
       description: req.body.description,
       phone: req.body.phone,
-      address: req.body.address
+      address: req.body.address,
+      userId: req.user.user_id
     };
-  
+
     const createdCustomer = await this.customerService.addCustomer(customer);
     return res.status(201).send(createdCustomer);
   };
