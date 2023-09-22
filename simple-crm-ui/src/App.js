@@ -1,12 +1,12 @@
-import React from 'react';
-import MainLayout from './components/layout/MainLayout';
-import CustomerPage from './containers/CustomerPage/CustomerPage';
+import React from 'react'
+import AuthProvider from './providers/authProvider.js'
+import Routes from "./routes/routes"
 
 const App = () => {
   return (
-    <MainLayout>
-      <CustomerPage></CustomerPage>
-    </MainLayout>
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
   );
 };
 export default App;

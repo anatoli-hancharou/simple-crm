@@ -1,6 +1,6 @@
 import { Modal, Form, Input, DatePicker, Select } from "antd";
 import { useEffect } from "react";
-import { CustomerStatusProps } from "../../constants/customer-status";
+import { CustomerStatusLookup } from "../../constants/customer-status";
 
 const layout = {
   labelCol: {
@@ -14,9 +14,10 @@ const layout = {
 function CustomerPopup(props) {
   const [form] = Form.useForm();
 
-  useEffect(() =>
-   {form.setFieldsValue(props.values)}, 
-   [props.values]
+  useEffect(() => {
+      {form.setFieldsValue(props.values)};
+    },
+    [props.values]
   );
 
   return (
@@ -30,11 +31,11 @@ function CustomerPopup(props) {
       <Form
         {...layout}
         form={form}
-        name="form_in_modal"
+        name={`${props.title.split(' ').join('_').toLowerCase()}`}
         size="middle"
       >
         <Form.Item
-          name="name"
+          name="customerName"
           label="Customer"
           rules={[
             {
@@ -46,7 +47,7 @@ function CustomerPopup(props) {
           <Input />
         </Form.Item>
         <Form.Item
-          name="phoneNumber"
+          name="phone"
           label="Phone"
           rules={[
             {
@@ -71,16 +72,14 @@ function CustomerPopup(props) {
         </Form.Item>
         <Form.Item name="status" label="Status">
           <Select
-            options={Object.keys(CustomerStatusProps).map(
-              (key) => ({ label: CustomerStatusProps[key].name.toUpperCase(), value: key })
-            )}
+            options={CustomerStatusLookup}
           />
         </Form.Item>
         <Form.Item
-          name="date"
+          name="dueDate"
           label="Date"
         >
-          <DatePicker />
+          <DatePicker showNow={false} showTime={{format: 'HH:mm', minuteStep: 30, hourStep: 1}} />
         </Form.Item>
         <Form.Item name="description" label="Description">
           <Input type="textarea" />

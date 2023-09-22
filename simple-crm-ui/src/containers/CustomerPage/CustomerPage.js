@@ -2,8 +2,6 @@ import CustomerTable from "../CustomerTable/CustomerTable";
 import CustomerToolbar from "../CustomerToolbar/CustomerToolbar";
 
 function CustomerPage(props) {
-  
-
   return (
     <>
       <CustomerToolbar>
@@ -11,7 +9,7 @@ function CustomerPage(props) {
       <CustomerTable>
       </CustomerTable>
     </>
-    );
+  );
 }
 
 export default CustomerPage;

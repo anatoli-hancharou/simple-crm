@@ -1,14 +1,17 @@
 import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+import { Layout, Menu, Button, theme } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
+import { useAuth } from '../../providers/authProvider';
+import { useNavigation, Outlet, Link } from 'react-router-dom';
 import styles from './Layout.module.css'
 
 const { Header, Content, Footer, Sider } = Layout;
-const items = [
+const menuItems = [
   {
     key: '1',
     icon: React.createElement(UserOutlined),
-    label: "Main",
+    label: <Link to="/customers">Main</Link>,
   }
 ]
 
@@ -16,6 +19,10 @@ const MainLayout = (props) => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const { setToken } = useAuth();
+
+  const navigation = useNavigation();
 
   return (
     <Layout hasSider>
@@ -30,7 +37,13 @@ const MainLayout = (props) => {
         }}
       >
         <div className="demo-logo-vertical" />
-        <Menu defaultSelectedKeys={['1']} theme="dark" mode="inline" items={items} />
+        <Menu defaultSelectedKeys={['1']} theme="dark" mode="inline" items={menuItems}/> 
+          {/* {menuItems.map((item) => (
+            <Menu.Item key={item.key} icon={item.icon} label={}>
+            </Menu.Item>
+          ))}
+        </Menu> */}
+        <Button onClick={() => setToken(null)} className={styles.LogoutButton} ghost size="large" icon={<LogoutOutlined />}></Button>
       </Sider>
       <Layout className={styles.SiteLayout}>
         {/* <Header className={styles.Header}
@@ -38,8 +51,8 @@ const MainLayout = (props) => {
             background: colorBgContainer,
           }}
         /> */}
-        <Content className={styles.ContentBlock}>
-          {props.children}
+        <Content className={`${styles.ContentBlock} ${navigation.state === "loading" ? "loading" : ""}`}>
+          <Outlet />
         </Content>
         <Footer className={styles.Footer}>
           SimpleCRM ©2023 Created by Anatoli Hancharou

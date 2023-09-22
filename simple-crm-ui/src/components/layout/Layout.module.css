@@ -15,3 +15,9 @@
 .Footer {
   text-align: center;
 }
+
+.LogoutButton {
+  border: none;
+  bottom: 5px;
+  position: fixed;
+}
