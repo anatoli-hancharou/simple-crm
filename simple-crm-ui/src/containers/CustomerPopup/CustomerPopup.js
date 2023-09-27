@@ -24,9 +24,23 @@ function CustomerPopup(props) {
     <Modal 
       forceRender 
       title={props.title}
-      open={props.open}
-      onCancel={props.onCancel}
       width={800}
+      open={props.open}
+      onCancel={() => {
+        props.onCancel();
+        form.resetFields();
+      }}
+      onOk={() => {
+        form
+          .validateFields()
+          .then(async (values) => {
+            form.resetFields();
+            await props.onCreate(values);
+          })
+          .catch((info) => {
+            console.log('Validate Failed:', info);
+          });
+      }}
     >
       <Form
         {...layout}
@@ -70,7 +84,7 @@ function CustomerPopup(props) {
         >
           <Input />
         </Form.Item>
-        <Form.Item name="status" label="Status">
+        <Form.Item name="status" label="Status" initialValue={0}>
           <Select
             options={CustomerStatusLookup}
           />
@@ -78,6 +92,12 @@ function CustomerPopup(props) {
         <Form.Item
           name="dueDate"
           label="Date"
+          rules={[
+            {
+              required: true,
+              message: 'Please input the date!',
+            },
+          ]}
         >
           <DatePicker showNow={false} showTime={{format: 'HH:mm', minuteStep: 30, hourStep: 1}} />
         </Form.Item>

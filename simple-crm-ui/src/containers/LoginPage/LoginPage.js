@@ -1,13 +1,16 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input, Layout } from 'antd';
+import { Button, Form, Input, theme } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Login } from '../../services/apiService';
-import { useAuth } from '../../providers/authProvider';
 import { useNavigate } from "react-router-dom";
 import styles from './LoginPage.module.css'
+import useAuthStore from '../../stores/authStore';
+
+const { useToken } = theme;
 
 const LoginPage = () => {
-
-  const { setToken } = useAuth();
+  const { token } = useToken();
+  const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
   const onLoginHandle = (creds) => {
@@ -16,7 +19,7 @@ const LoginPage = () => {
       password: creds.password
     })
     .then(function (response) {
-      setToken(response.data.token);
+      login(response.data.token);
       navigate("/customers", { replace: true });
     })
     .catch(function (error) {
@@ -29,75 +32,61 @@ const LoginPage = () => {
   };
 
   return (
+    <div className={styles.CenteredFormContainer}>
       <Form className={styles.LoginForm}
-      name="login_form"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
-      style={{
-        maxWidth: 600,
-      }}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onLoginHandle}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item
-        label="Login"
-        name="login"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your username!',
-          },
-        ]}
+        name="login_form"
+        style={{ borderRadius: token.borderRadius }}
+        initialValues={{ remember: true }}
+        onFinish={onLoginHandle}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
       >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item
-        name="remember"
-        valuePropName="checked"
-        wrapperCol={{
-          offset: 8,
-          span: 16,
-        }}
-      >
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      <Form.Item
-        wrapperCol={{
-          offset: 8,
-          span: 16,
-        }}
-      >
-        <Button 
-          type="primary"
-          htmlType="submit"
+        <Form.Item
+          name="login"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your username!',
+            },
+          ]}
         >
-          Login
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input prefix={<UserOutlined className={styles.SiteFormItemIcon} />} placeholder="Username" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your password!',
+            },
+          ]}
+        >
+          <Input.Password prefix={<LockOutlined className={styles.SiteFormItemIcon} />} placeholder="Password"/>
+        </Form.Item>
+
+        {/* <Form.Item
+          name="remember"
+          valuePropName="checked"
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item> */}
+
+        <Form.Item>
+          <Button 
+            type="primary"
+            htmlType="submit"
+            className={styles.LoginFormButton}
+          >
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 }
 

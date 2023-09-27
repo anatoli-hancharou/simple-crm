@@ -9,12 +9,21 @@ class CustomerService {
     return newCustomer;
   };
 
-  getAllCustomers = async () => await Customer.findAll();
+  updateCustomer = async (id, customer) => {
+    await Customer.update(customer, {
+      where: {
+        id: id
+      }
+    });
+  }
 
-  // getUser = (id) => {
-  //   const user = this.users.find((u) => u.id === id);
-  //   return user;
-  // };
+  getAllCustomers = async (userId) => {
+    return await Customer.findAll({
+      where: {
+        userId: userId
+      }
+    });
+  }
 }
 
 export default CustomerService;

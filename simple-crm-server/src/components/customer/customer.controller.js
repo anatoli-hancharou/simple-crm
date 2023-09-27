@@ -18,8 +18,24 @@ class CustomerController {
     return res.status(201).send(createdCustomer);
   };
 
+  updateCustomer = async (req, res) => {
+    const id = req.params.id;
+    const customer = {
+      customerName: req.body.customerName,
+      dueDate: new Date(req.body.dueDate),
+      status: req.body.status,
+      description: req.body.description,
+      phone: req.body.phone,
+      address: req.body.address,
+    };
+
+    await this.customerService.updateCustomer(id, customer);
+    return res.status(204).send();
+  }
+
   getAllCustomers = async (req, res) => {
-    return res.status(200).send(await this.customerService.getAllCustomers());
+    const customers = await this.customerService.getAllCustomers(req.user.user_id);
+    return res.status(200).send(customers);
   }
 }
 

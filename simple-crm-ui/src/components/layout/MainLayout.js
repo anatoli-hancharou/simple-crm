@@ -2,9 +2,9 @@ import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
-import { useAuth } from '../../providers/authProvider';
 import { useNavigation, Outlet, Link } from 'react-router-dom';
 import styles from './Layout.module.css'
+import useAuthStore from '../../stores/authStore';
 
 const { Header, Content, Footer, Sider } = Layout;
 const menuItems = [
@@ -20,7 +20,7 @@ const MainLayout = (props) => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const { setToken } = useAuth();
+  const logout = useAuthStore((state) => state.logout);
 
   const navigation = useNavigation();
 
@@ -43,7 +43,7 @@ const MainLayout = (props) => {
             </Menu.Item>
           ))}
         </Menu> */}
-        <Button onClick={() => setToken(null)} className={styles.LogoutButton} ghost size="large" icon={<LogoutOutlined />}></Button>
+        <Button onClick={() => logout(null)} className={styles.LogoutButton} ghost size="large" icon={<LogoutOutlined />}></Button>
       </Sider>
       <Layout className={styles.SiteLayout}>
         {/* <Header className={styles.Header}

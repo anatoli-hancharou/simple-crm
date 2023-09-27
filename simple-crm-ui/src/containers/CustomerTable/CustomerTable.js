@@ -1,52 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Button, Layout,  } from 'antd';
+import React, { useState } from 'react';
+import { Table, Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import CustomerStatus from '../../components/CustomerStatus/CustomerStatus';
 import CustomerPopup from '../CustomerPopup/CustomerPopup';
+import { updateCustomer } from '../../services/apiService';
 import dayjs from 'dayjs';
 import styles from './CustomerTable.module.css'
-import { getAllCustomers } from '../../services/apiService';
-import { useAuth } from '../../providers/authProvider';
 
-const CustomerTable = () => {
-  const [data, setData] = useState();
+const CustomerTable = ({ data, loading, onCustomerAdded }) => {
   const [isCustomerPopupOpen, setCustomerPopupOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState();
-  const [loading, setLoading] = useState(false);
-  const { token } = useAuth();
 
   const handleCancel = () => {
     setCustomerPopupOpen(false);
   };
 
   const onEditClick = (rowData) => {
-    console.log(dayjs(rowData.dueDate));
     setSelectedRowData({...rowData, dueDate: dayjs(rowData.dueDate)});
     setCustomerPopupOpen(true);
   }
 
-  useEffect(() => {
-    if (token) {
-      const fetchData = () => {
-        setLoading(true);
-          getAllCustomers()
-          .then(({ data }) => {
-            setData(data);
-            setLoading(false);
-            // setTableParams({
-            //   ...tableParams,
-            //   pagination: {
-            //     ...tableParams.pagination,
-            //     total: 200,
-            //     // 200 is mock data, you should read it from server
-            //     // total: data.totalCount,
-            //   },
-            // });
-          });
-      };
-      fetchData();
-    }
-  }, [token]);
+  const onUpdateCustomer = async (customer) => {
+    await updateCustomer(selectedRowData.id, customer);
+    setCustomerPopupOpen(false);
+    onCustomerAdded();
+  }
 
   const columns = [
     {
@@ -105,7 +83,7 @@ const CustomerTable = () => {
       }}
       dataSource={data}
     />
-    <CustomerPopup title="Edit customer" open={isCustomerPopupOpen} onCancel={handleCancel} values={selectedRowData}></CustomerPopup>
+    <CustomerPopup title="Edit customer" open={isCustomerPopupOpen} onCancel={handleCancel} onCreate={onUpdateCustomer} values={selectedRowData}></CustomerPopup>
   </>
 )};
 

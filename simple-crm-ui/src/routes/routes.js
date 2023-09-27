@@ -1,13 +1,10 @@
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route, redirect } from "react-router-dom";
-import { useAuth } from "../providers/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
 import MainLayout from "../components/layout/MainLayout";
 import CustomerPage from "../containers/CustomerPage/CustomerPage";
 import LoginPage from "../containers/LoginPage/LoginPage";
 
-const Routes = () => {
-  const { token } = useAuth();
-  
+const Routes = () => { 
   const routesForPublic = [
     {
       path: "/about-us",

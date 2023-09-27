@@ -7,9 +7,9 @@ class CustomerRouter {
 
   getRouter() {
     const router = express.Router();
-    // router.route('/:id').get(this.userController.getUser);
     router.route('/').get(this.customerController.getAllCustomers);
     router.route('/').post(this.customerController.createCustomer);
+    router.route('/:id').put(this.customerController.updateCustomer);
     return router;
   }
 }

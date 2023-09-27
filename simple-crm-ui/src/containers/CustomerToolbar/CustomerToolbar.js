@@ -3,17 +3,24 @@ import { UsergroupAddOutlined } from '@ant-design/icons';
 import styles from './CustomerToolbar.module.css'
 import { useState } from 'react';
 import CustomerPopup from '../CustomerPopup/CustomerPopup';
+import { addCustomer } from '../../services/apiService';
 
-function CustomerToolbar(props) {
+function CustomerToolbar({ onCustomerAdded }) {
 
-  const [isAddPopupOpen, setAddPopupState] = useState(false);
+  const [isAddPopupOpen, setAddPopupOpen] = useState(false);
 
   const handleCancel = () => {
-    setAddPopupState(false);
+    setAddPopupOpen(false);
   }
 
   const onAddClick = () => {
-    setAddPopupState(true);
+    setAddPopupOpen(true);
+  }
+  
+  const onCreateCustomer = async (customer) => {
+    await addCustomer(customer);
+    setAddPopupOpen(false);
+    onCustomerAdded();
   }
 
   return (
@@ -23,7 +30,7 @@ function CustomerToolbar(props) {
           <Button icon={<UsergroupAddOutlined />} onClick={onAddClick}>Add</Button>
         </Space>
       </Layout>
-      <CustomerPopup title="Add customer" open={isAddPopupOpen} onCancel={handleCancel}></CustomerPopup>
+      <CustomerPopup title="Add customer" open={isAddPopupOpen} onCancel={handleCancel} onCreate={onCreateCustomer}></CustomerPopup>
     </>
   );
 }
