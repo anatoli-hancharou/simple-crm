@@ -1,60 +1,76 @@
 import React from 'react';
-import { Button, Form, Input, theme } from 'antd';
+import { Button, Form, Input, notification, theme } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Login } from '../../services/apiService';
-import { useNavigate } from "react-router-dom";
+import { login } from '../../services/apiService';
+import { useNavigate, Link } from "react-router-dom";
 import styles from './LoginPage.module.css'
 import useAuthStore from '../../stores/authStore';
+import { EMAIL_REGEX } from '../../constants/regex-constants';
 
 const { useToken } = theme;
 
 const LoginPage = () => {
   const { token } = useToken();
-  const login = useAuthStore((state) => state.login);
+  const [form] = Form.useForm();
+  const registerToken = useAuthStore((state) => state.login);
   const navigate = useNavigate();
+  const [api, contextHolder] = notification.useNotification();
 
   const onLoginHandle = (creds) => {
-    Login({
-      email: creds.login,
+    login({
+      email: creds.email,
       password: creds.password
     })
     .then(function (response) {
-      login(response.data.token);
+      registerToken(response.data.token);
       navigate("/customers", { replace: true });
     })
     .catch(function (error) {
-      console.log(error);
+      if (error.response.status === 400) {
+        openNotificationWithIcon('error', 'Oops...', error.response.data);
+        form.resetFields();
+      }
     });
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+  const openNotificationWithIcon = (type, message, description) => {
+    api[type]({
+      message: message,
+      description: description,
+    });
+  }
 
   return (
     <div className={styles.CenteredFormContainer}>
+      {contextHolder}
       <Form className={styles.LoginForm}
+        form={form}
         name="login_form"
         style={{ borderRadius: token.borderRadius }}
         initialValues={{ remember: true }}
         onFinish={onLoginHandle}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
-          name="login"
+          name="email"
+          validateTrigger="onBlur"
           rules={[
             {
               required: true,
-              message: 'Please input your username!',
+              message: 'Please input your email!',
             },
+            {
+              pattern: EMAIL_REGEX,
+              message: 'Email format is invalid!',
+            }
           ]}
         >
-          <Input prefix={<UserOutlined className={styles.SiteFormItemIcon} />} placeholder="Username" />
+          <Input prefix={<UserOutlined className={styles.SiteFormItemIcon} />} placeholder="Email" />
         </Form.Item>
 
         <Form.Item
           name="password"
+          validateTrigger="onBlur"
           rules={[
             {
               required: true,
@@ -84,6 +100,12 @@ const LoginPage = () => {
           >
             Login
           </Button>
+        </Form.Item>
+
+        <Form.Item>
+          <div className={styles.RegisterLink}>
+            <Link to="/register">Register</Link>
+          </div>
         </Form.Item>
       </Form>
     </div>

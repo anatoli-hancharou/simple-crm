@@ -7,6 +7,7 @@ class CustomerController {
     const customer = {
       customerName: req.body.customerName,
       dueDate: new Date(req.body.dueDate),
+      created: new Date(),
       status: req.body.status,
       description: req.body.description,
       phone: req.body.phone,

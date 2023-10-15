@@ -3,6 +3,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import MainLayout from "../components/layout/MainLayout";
 import CustomerPage from "../containers/CustomerPage/CustomerPage";
 import LoginPage from "../containers/LoginPage/LoginPage";
+import RegisterPage from "../containers/RegisterPage.js/RegisterPage";
 
 const Routes = () => { 
   const routesForPublic = [
@@ -74,6 +75,10 @@ const Routes = () => {
           //     signal: request.signal,
           //   })
           // }
+        />
+        <Route
+          path="register"
+          element={<RegisterPage></RegisterPage>}
         />
         <Route element={<ProtectedRoute />}>
           <Route

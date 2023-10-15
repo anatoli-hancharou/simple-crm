@@ -1,6 +1,7 @@
 import { Modal, Form, Input, DatePicker, Select } from "antd";
 import { useEffect } from "react";
 import { CustomerStatusLookup } from "../../constants/customer-status";
+import { PHONE_NUMBER_REGEX } from "../../constants/regex-constants";
 
 const layout = {
   labelCol: {
@@ -68,6 +69,10 @@ function CustomerPopup(props) {
               required: true,
               message: 'Please input the phone number!',
             },
+            {
+              pattern: PHONE_NUMBER_REGEX,
+              message: 'Phone number format is invalid!',
+            }
           ]}
         >
           <Input />
@@ -99,7 +104,7 @@ function CustomerPopup(props) {
             },
           ]}
         >
-          <DatePicker showNow={false} showTime={{format: 'HH:mm', minuteStep: 30, hourStep: 1}} />
+          <DatePicker format={'DD-MM-YYYY HH:mm'} inputReadOnly={true} showNow={false} showTime={{format: 'HH:mm', minuteStep: 30, hourStep: 1}} />
         </Form.Item>
         <Form.Item name="description" label="Description">
           <Input type="textarea" />

@@ -16,6 +16,10 @@ const Customer = sequelize.define('Customer', {
     type: Sequelize.DATE,
     allowNull: false
   },
+  created: {
+    type: Sequelize.DATE,
+    allowNull: false
+  },
   status: {
     type: Sequelize.TINYINT,
     allowNull: false

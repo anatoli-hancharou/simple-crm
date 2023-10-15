@@ -17,7 +17,7 @@ class AuthController {
     const oldUser = await this.authService.getUserByEmail(email);
 
     if (oldUser) {
-      return res.status(409).send("User Already Exist. Please Login");
+      return res.status(409).send("User already exists. Please login");
     }
 
     const encryptedPassword = await bcrypt.hash(password, 10);
@@ -50,6 +50,7 @@ class AuthController {
 
       return res.status(200).json({email: user.email, token});
     }
+
     return res.status(400).send("Invalid Credentials");
   }
 }
