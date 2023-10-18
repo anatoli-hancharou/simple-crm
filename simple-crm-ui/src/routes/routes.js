@@ -4,6 +4,7 @@ import MainLayout from "../components/layout/MainLayout";
 import CustomerPage from "../containers/CustomerPage/CustomerPage";
 import LoginPage from "../containers/LoginPage/LoginPage";
 import RegisterPage from "../containers/RegisterPage.js/RegisterPage";
+import StatisticsPage from "../containers/StatisticsPage/StatisticsPage";
 
 const Routes = () => { 
   const routesForPublic = [
@@ -86,8 +87,14 @@ const Routes = () => {
             element={<CustomerPage />}
             // loader={redirectIfUser}
           />
+          <Route
+            path="statistics"
+            element={<StatisticsPage />}
+            // loader={redirectIfUser}
+          />
           {/* <Route path="logout" action={logoutUser} /> */}
         </Route>
+        
         <Route path="*" element={<>404</>} />
       </Route>
     )

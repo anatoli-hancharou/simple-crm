@@ -1,15 +1,15 @@
-import { EditOutlined } from "@ant-design/icons";
-import { Button, Table } from "antd";
+import { Table } from "antd";
 import dayjs from "dayjs";
 import React, { useState } from "react";
-import CustomerStatus from "../../components/CustomerStatus/CustomerStatus";
+import CustomerStatus from "../CustomerStatus/CustomerStatus";
 import { CustomerStatusLookup } from "../../constants/customer-status";
-import { updateCustomer } from "../../services/apiService";
+import { deleteCustomer, updateCustomer } from "../../services/apiService";
 import useParamsStore from "../../stores/paramsStore";
-import CustomerPopup from "../CustomerPopup/CustomerPopup";
+import CustomerPopup from "../../containers/CustomerPopup/CustomerPopup";
 import styles from "./CustomerTable.module.css";
+import EditorCell from "../EditorCell/EditorCell";
 
-const CustomerTable = ({ data, loading, onCustomerAdded }) => {
+const CustomerTable = ({ data, loading, onDataChanged }) => {
   const [isCustomerPopupOpen, setCustomerPopupOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState();
   const setParams = useParamsStore((state) => state.setParams);
@@ -24,10 +24,15 @@ const CustomerTable = ({ data, loading, onCustomerAdded }) => {
     setCustomerPopupOpen(true);
   };
 
+  const onDeleteClick = async (recordId) => {
+    await deleteCustomer(recordId);
+    onDataChanged();
+  };
+
   const onUpdateCustomer = async (customer) => {
     await updateCustomer(selectedRowData.id, customer);
     setCustomerPopupOpen(false);
-    onCustomerAdded();
+    onDataChanged();
   };
 
   const onTableChange = (pagination, filters, sorter, extra) => {
@@ -76,15 +81,12 @@ const CustomerTable = ({ data, loading, onCustomerAdded }) => {
     {
       title: "Action",
       dataIndex: "",
-      render: (_, record) => {
-        return (
-          <Button
-            shape="circle"
-            icon={<EditOutlined />}
-            onClick={() => onEditClick(record)}
-          />
-        );
-      },
+      render: (_, record) => (
+        <EditorCell
+          onEditClick={onEditClick.bind(this, record)}
+          onDeleteClick={onDeleteClick.bind(this, record.id)}
+        />
+      ),
     },
   ];
 

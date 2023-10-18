@@ -17,6 +17,14 @@ class CustomerService {
     });
   }
 
+  deleteCustomer = async (id) => {
+    await Customer.destroy({
+      where: {
+        id: id
+      }
+    });
+  }
+
   getAllCustomers = async (userId) => {
     return await Customer.findAll({
       where: {

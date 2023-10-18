@@ -5,7 +5,6 @@ export const ProtectedRoute = () => {
   const token = useAuthStore((state) => state.token);
 
   // Check if the user is authenticated
-  console.log(token);
   if (!token) {
     // If not authenticated, redirect to the login page
     return <Navigate to="/login" />;

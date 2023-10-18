@@ -1,19 +1,33 @@
 import React from "react";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, LineChartOutlined } from "@ant-design/icons";
 import { Layout, Menu, Button, Tooltip, theme } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
-import { useNavigation, Outlet, Link } from "react-router-dom";
+import { useNavigation, Outlet, NavLink, useLocation } from "react-router-dom";
 import styles from "./Layout.module.css";
 import useAuthStore from "../../stores/authStore";
 
 const { Header, Content, Footer, Sider } = Layout;
-const menuItems = [
+
+const menuItemProps = [
   {
-    key: "1",
-    icon: React.createElement(UserOutlined),
-    label: <Link to="/customers">Main</Link>,
+    icon: <UserOutlined />,
+    label: "Customers",
+    path: "/customers",
+  },
+  {
+    icon: <LineChartOutlined />,
+    label: "Statistics",
+    path: "/statistics",
   },
 ];
+
+const renderMenuItems = () => {
+  return menuItemProps.map((item, index) => ({
+    key: item.path,
+    icon: item.icon,
+    label: <NavLink to={item.path}>{item.label}</NavLink>,
+  }));
+};
 
 const MainLayout = (props) => {
   const {
@@ -21,8 +35,14 @@ const MainLayout = (props) => {
   } = theme.useToken();
 
   const logout = useAuthStore((state) => state.logout);
-
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  
   const navigation = useNavigation();
+  const location = useLocation();
+
+  const selectedKey = menuItemProps.find((item) =>
+    location.pathname.includes(item.path)
+  )?.path;
 
   return (
     <Layout hasSider>
@@ -38,12 +58,12 @@ const MainLayout = (props) => {
       >
         <div className="demo-logo-vertical" />
         <Menu
-          defaultSelectedKeys={["1"]}
+          selectedKeys={[selectedKey]}
+          items={renderMenuItems()}
           theme="dark"
           mode="inline"
-          items={menuItems}
         />
-        <Tooltip placement="rightTop" title={"Logout"}>
+        {isLoggedIn() && <Tooltip placement="rightTop" title={"Logout"}>
           <Button
             onClick={() => logout(null)}
             className={styles.LogoutButton}
@@ -51,7 +71,7 @@ const MainLayout = (props) => {
             size="large"
             icon={<LogoutOutlined />}
           ></Button>
-        </Tooltip>
+        </Tooltip>}
       </Sider>
       <Layout className={styles.SiteLayout}>
         {/* <Header className={styles.Header}

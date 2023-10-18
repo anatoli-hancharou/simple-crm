@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllCustomers } from "../../services/apiService";
-import CustomerTable from "../CustomerTable/CustomerTable";
+import CustomerTable from "../../components/CustomerTable/CustomerTable";
 import CustomerToolbar from "../CustomerToolbar/CustomerToolbar";
 import useAuthStore from '../../stores/authStore';
 
@@ -27,7 +27,7 @@ function CustomerPage(props) {
     .finally(() => setLoading(false));
   }
 
-  const onCustomerAdded = async () => {
+  const reloadData = async () => {
     setLoading(true);
     await loadAllCustomers();
   }
@@ -44,9 +44,9 @@ function CustomerPage(props) {
 
   return (
     <>
-      <CustomerToolbar onCustomerAdded={onCustomerAdded}>
+      <CustomerToolbar onCustomerAdded={reloadData}>
       </CustomerToolbar>
-      <CustomerTable data={data} loading={loading} onCustomerAdded={onCustomerAdded}>
+      <CustomerTable data={data} loading={loading} onDataChanged={reloadData}>
       </CustomerTable>
     </>
   );

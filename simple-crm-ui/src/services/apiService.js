@@ -19,3 +19,13 @@ export const addCustomer = async (payload) => {
 export const updateCustomer = async (id, payload) => {
   return await axios.put('/customers/' + id, payload);
 };
+
+export const deleteCustomer = async (id) => {
+  return await axios.delete('/customers/' + id);
+};
+
+// Statistics
+export const getStatusDistributionByOverTimeRange = async (from, to, payload) => {
+  let params = (from && to) ? `?from=${from}&to=${to}` : '';
+  return await axios.get(`/statistics/get-status-distribution${params}`);
+};

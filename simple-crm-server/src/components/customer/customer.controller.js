@@ -34,6 +34,12 @@ class CustomerController {
     return res.status(204).send();
   }
 
+  deleteCustomer = async (req, res) => {
+    const id = req.params.id;
+    await this.customerService.deleteCustomer(id);
+    return res.status(204).send();
+  }
+
   getAllCustomers = async (req, res) => {
     const customers = await this.customerService.getAllCustomers(req.user.user_id);
     return res.status(200).send(customers);
