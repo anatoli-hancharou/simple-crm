@@ -36,7 +36,7 @@ const MainLayout = (props) => {
 
   const logout = useAuthStore((state) => state.logout);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  
+
   const navigation = useNavigation();
   const location = useLocation();
 
@@ -63,22 +63,19 @@ const MainLayout = (props) => {
           theme="dark"
           mode="inline"
         />
-        {isLoggedIn() && <Tooltip placement="rightTop" title={"Logout"}>
-          <Button
-            onClick={() => logout(null)}
-            className={styles.LogoutButton}
-            ghost
-            size="large"
-            icon={<LogoutOutlined />}
-          ></Button>
-        </Tooltip>}
+        {isLoggedIn() && (
+          <Tooltip placement="rightTop" title={"Logout"}>
+            <Button
+              onClick={() => logout(null)}
+              className={styles.LogoutButton}
+              ghost
+              size="large"
+              icon={<LogoutOutlined />}
+            ></Button>
+          </Tooltip>
+        )}
       </Sider>
       <Layout className={styles.SiteLayout}>
-        {/* <Header className={styles.Header}
-          style={{
-            background: colorBgContainer,
-          }}
-        /> */}
         <Content
           className={`${styles.ContentBlock} ${
             navigation.state === "loading" ? "loading" : ""

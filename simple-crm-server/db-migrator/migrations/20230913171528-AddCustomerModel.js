@@ -17,13 +17,17 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
+      created: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
       status: {
         type: Sequelize.TINYINT,
         allowNull: false
       },
       description: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       phone: {
         type: Sequelize.STRING,
@@ -31,7 +35,7 @@ module.exports = {
       },
       address: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       userId: {
         type: Sequelize.DataTypes.INTEGER,
