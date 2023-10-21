@@ -36,6 +36,11 @@ const Customer = sequelize.define('Customer', {
     type: Sequelize.STRING,
     allowNull: true
   },
+  notified: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
   userId: {
     type: Sequelize.INTEGER,
     references: {
@@ -46,5 +51,11 @@ const Customer = sequelize.define('Customer', {
 }, {
   timestamps: false
 });
+
+User.hasMany(Customer, {
+  foreignKey: 'userId',
+  onDelete: 'CASCADE',
+});
+Customer.belongsTo(User);
 
 export default Customer;
