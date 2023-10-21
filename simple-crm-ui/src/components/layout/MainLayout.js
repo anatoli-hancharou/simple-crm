@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { UserOutlined, LineChartOutlined } from "@ant-design/icons";
-import { Layout, Menu, Button, Tooltip, theme } from "antd";
+import { Layout, Menu, Button, Tooltip, theme, notification } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useNavigation, Outlet, NavLink, useLocation } from "react-router-dom";
 import styles from "./Layout.module.css";
 import useAuthStore from "../../stores/authStore";
+import useNotificationStore from "../../stores/notificationStore";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const menuItemProps = [
   {
@@ -37,15 +38,29 @@ const MainLayout = (props) => {
   const logout = useAuthStore((state) => state.logout);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
+  const error = useNotificationStore((state) => state.error);
+
   const navigation = useNavigation();
   const location = useLocation();
+
+  const [api, contextHolder] = notification.useNotification();
 
   const selectedKey = menuItemProps.find((item) =>
     location.pathname.includes(item.path)
   )?.path;
 
+  useEffect(() => {
+    if (error.message) {
+      api["error"]({
+        message: error.message,
+        description: error.description,
+      });
+    }
+  }, [error, api]);
+
   return (
     <Layout hasSider>
+      {contextHolder}
       <Sider
         style={{
           overflow: "auto",

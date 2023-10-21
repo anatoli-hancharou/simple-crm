@@ -1,5 +1,5 @@
 import { Pie } from "@ant-design/plots";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { getStatusDistributionByOverTimeRange } from "../../services/apiService";
 import {
   CustomerStatusLookup,
@@ -8,14 +8,16 @@ import {
 import { DatePicker, Empty } from "antd";
 import dayjs from "dayjs";
 import styles from './StatusPieChart.module.css'
+import useNotificationStore from "../../stores/notificationStore";
 
 const { RangePicker } = DatePicker;
 
 const StatusPieChart = () => {
   const [data, setData] = useState([]);
   const [dates, setDates] = useState([dayjs().subtract(7, "day"), dayjs()]);
+  const setError = useNotificationStore((state) => state.setError);
 
-  const loadStatusDistribution = async () => {
+  const loadStatusDistribution = useCallback(async () => {
     getStatusDistributionByOverTimeRange(dates[0], dates[1])
       .then(({ data }) => {
         data = data.map(({ status, count }) => ({
@@ -24,16 +26,13 @@ const StatusPieChart = () => {
         }));
         setData(data);
       })
+      .catch(err => setError(err.message, err.description))
       .finally(() => {});
-  };
+  }, [dates, setError]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      await loadStatusDistribution();
-    };
-
-    fetchData();
-  }, [dates]);
+    loadStatusDistribution();
+  }, [loadStatusDistribution]);
 
   const onRangeChanged = (dates, dateStrings) => {
     setDates(dates ?? []);
@@ -70,7 +69,7 @@ const StatusPieChart = () => {
   return (
     <>
       <RangePicker showTime defaultValue={dates} onChange={onRangeChanged} />
-      {config.data.length > 0 ? <Pie {...config} /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />};
+      {config.data.length > 0 ? <Pie {...config} /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
     </>
   );
 };

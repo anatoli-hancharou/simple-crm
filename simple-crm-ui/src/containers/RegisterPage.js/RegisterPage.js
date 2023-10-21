@@ -1,9 +1,10 @@
-import { Button, Form, Input, notification, theme } from "antd";
+import { Button, Form, Input, theme } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { register } from "../../services/apiService";
 import { useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.css";
 import { EMAIL_REGEX } from "../../constants/regex-constants";
+import useNotificationStore from "../../stores/notificationStore";
 
 const { useToken } = theme;
 
@@ -11,7 +12,7 @@ const RegisterPage = () => {
   const [form] = Form.useForm();
   const { token } = useToken();
   const navigate = useNavigate();
-  const [api, contextHolder] = notification.useNotification();
+  const setError = useNotificationStore((state) => state.setError);
 
   const onRegisterHandle = (creds) => {
     register({
@@ -23,7 +24,9 @@ const RegisterPage = () => {
     })
     .catch(function (error) {
       if (error.response.status === 409) {
-        openNotificationWithIcon('error', 'Oops...', error.response.data);
+        setError('Oops...', error.response.data);
+      } else {
+        setError("Oops...", error.message);
       }
     });
   };
@@ -34,16 +37,8 @@ const RegisterPage = () => {
     }
   };
 
-  const openNotificationWithIcon = (type, message, description) => {
-    api[type]({
-      message: message,
-      description: description,
-    });
-  }
-
   return (
     <div className={styles.CenteredFormContainer}>
-      {contextHolder}
       <Form
         className={styles.RegisterForm}
         form={form}

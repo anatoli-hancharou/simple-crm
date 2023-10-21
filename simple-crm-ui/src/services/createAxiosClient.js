@@ -3,7 +3,7 @@ import axios from 'axios';
 export function createAxiosClient({
   options,
   getCurrentAccessToken,
-  logout
+  logout,
 }) {
   const client = axios.create(options);
 
@@ -30,7 +30,7 @@ export function createAxiosClient({
       if (error.response?.status === 401) {
         logout();
       }
-
+      
       return Promise.reject(error);
     }
   );

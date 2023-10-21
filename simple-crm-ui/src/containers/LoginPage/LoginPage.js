@@ -1,11 +1,12 @@
 import React from "react";
-import { Button, Form, Input, notification, theme } from "antd";
+import { Button, Form, Input, theme } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { login } from "../../services/apiService";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./LoginPage.module.css";
 import useAuthStore from "../../stores/authStore";
 import { EMAIL_REGEX } from "../../constants/regex-constants";
+import useNotificationStore from "../../stores/notificationStore";
 
 const { useToken } = theme;
 
@@ -14,7 +15,7 @@ const LoginPage = () => {
   const [form] = Form.useForm();
   const registerToken = useAuthStore((state) => state.login);
   const navigate = useNavigate();
-  const [api, contextHolder] = notification.useNotification();
+  const setError = useNotificationStore((state) => state.setError);
 
   const onLoginHandle = (creds) => {
     login({
@@ -26,23 +27,17 @@ const LoginPage = () => {
         navigate("/customers", { replace: true });
       })
       .catch(function (error) {
-        if (error.response.status === 400) {
-          openNotificationWithIcon("error", "Oops...", "Incorrect email or password. Please try again.");
+        if (error.response?.status === 400) {
+          setError("Oops...", "Incorrect email or password. Please try again.");
           form.resetFields();
+        } else {
+          setError("Oops...", error.message);
         }
       });
   };
 
-  const openNotificationWithIcon = (type, message, description) => {
-    api[type]({
-      message: message,
-      description: description,
-    });
-  };
-
   return (
     <div className={styles.CenteredFormContainer}>
-      {contextHolder}
       <Form
         className={styles.LoginForm}
         form={form}

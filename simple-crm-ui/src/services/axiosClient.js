@@ -7,7 +7,6 @@ function getCurrentAccessToken() {
   return useAuthStore.getState().token;
 }
 
-
 async function logout(){
   useAuthStore.getState().logout();
 }
@@ -21,7 +20,7 @@ const axios = createAxiosClient({
       }
   },
   getCurrentAccessToken,
-  logout
+  logout,
 })
 
 export default axios;
