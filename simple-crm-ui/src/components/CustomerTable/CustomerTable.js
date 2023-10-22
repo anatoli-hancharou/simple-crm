@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Table, Input } from "antd";
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import CustomerStatus from "../CustomerStatus/CustomerStatus";
@@ -8,6 +8,8 @@ import useParamsStore from "../../stores/paramsStore";
 import CustomerPopup from "../../containers/CustomerPopup/CustomerPopup";
 import styles from "./CustomerTable.module.css";
 import EditorCell from "../EditorCell/EditorCell";
+
+const { TextArea } = Input;
 
 const CustomerTable = ({ data, loading, onDataChanged }) => {
   const [isCustomerPopupOpen, setCustomerPopupOpen] = useState(false);
@@ -99,13 +101,15 @@ const CustomerTable = ({ data, loading, onDataChanged }) => {
         loading={loading}
         expandable={{
           expandedRowRender: (record) => (
-            <p
+            <TextArea
+              value={record.description}
+              disabled={true}
               style={{
-                margin: 0,
+                color: "#2d030e",
+                fontStyle: "italic",
+                backgroundColor: "#f4f4f4",
               }}
-            >
-              {record.description}
-            </p>
+            ></TextArea>
           ),
           rowExpandable: (record) => record.name !== "Not Expandable",
         }}

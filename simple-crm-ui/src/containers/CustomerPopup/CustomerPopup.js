@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { CustomerStatusLookup } from "../../constants/customer-status";
 import { PHONE_NUMBER_REGEX } from "../../constants/regex-constants";
 
+const { TextArea } = Input;
+
 const layout = {
   labelCol: {
     span: 4,
@@ -16,14 +18,14 @@ function CustomerPopup(props) {
   const [form] = Form.useForm();
 
   useEffect(() => {
-      {form.setFieldsValue(props.values)};
-    },
-    [props.values]
-  );
+    {
+      form.setFieldsValue(props.values);
+    }
+  }, [props.values]);
 
   return (
-    <Modal 
-      forceRender 
+    <Modal
+      forceRender
       title={props.title}
       width={800}
       open={props.open}
@@ -39,14 +41,14 @@ function CustomerPopup(props) {
             await props.onCreate(values);
           })
           .catch((info) => {
-            console.log('Validate Failed:', info);
+            console.log("Validate Failed:", info);
           });
       }}
     >
       <Form
         {...layout}
         form={form}
-        name={`${props.title.split(' ').join('_').toLowerCase()}`}
+        name={`${props.title.split(" ").join("_").toLowerCase()}`}
         size="middle"
       >
         <Form.Item
@@ -55,7 +57,7 @@ function CustomerPopup(props) {
           rules={[
             {
               required: true,
-              message: 'Please input the name!',
+              message: "Please input the name!",
             },
           ]}
         >
@@ -67,12 +69,12 @@ function CustomerPopup(props) {
           rules={[
             {
               required: true,
-              message: 'Please input the phone number!',
+              message: "Please input the phone number!",
             },
             {
               pattern: PHONE_NUMBER_REGEX,
-              message: 'Phone number format is invalid!',
-            }
+              message: "Phone number format is invalid!",
+            },
           ]}
         >
           <Input />
@@ -83,16 +85,14 @@ function CustomerPopup(props) {
           rules={[
             {
               required: true,
-              message: 'Please input the address!',
+              message: "Please input the address!",
             },
           ]}
         >
           <Input />
         </Form.Item>
         <Form.Item name="status" label="Status" initialValue={0}>
-          <Select
-            options={CustomerStatusLookup}
-          />
+          <Select options={CustomerStatusLookup} />
         </Form.Item>
         <Form.Item
           name="dueDate"
@@ -100,14 +100,26 @@ function CustomerPopup(props) {
           rules={[
             {
               required: true,
-              message: 'Please input the date!',
+              message: "Please input the date!",
             },
           ]}
         >
-          <DatePicker format={'DD-MM-YYYY HH:mm'} inputReadOnly={true} showNow={false} showTime={{format: 'HH:mm', minuteStep: 30, hourStep: 1}} />
+          <DatePicker
+            format={"DD-MM-YYYY HH:mm"}
+            inputReadOnly={true}
+            showNow={false}
+            showTime={{ format: "HH:mm", minuteStep: 30, hourStep: 1 }}
+          />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input type="textarea" />
+          <TextArea
+            showCount
+            maxLength={500}
+            autoSize={{
+              minRows: 2,
+              maxRows: 6,
+            }}
+          />
         </Form.Item>
       </Form>
     </Modal>
