@@ -7,6 +7,7 @@ export function createAxiosClient({
 }) {
   const client = axios.create(options);
 
+  // Request interceptor that will be executed each time before sending a request.
   client.interceptors.request.use(
     (config) => {
       if (config.authorization !== false) {
@@ -22,6 +23,7 @@ export function createAxiosClient({
     }
   );
 
+  // Response interceptor that will be executed each time a response from api call is returned.
   client.interceptors.response.use(
     (response) => {
       return response;

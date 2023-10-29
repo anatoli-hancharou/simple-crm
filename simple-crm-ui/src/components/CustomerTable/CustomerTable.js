@@ -5,7 +5,7 @@ import CustomerStatus from "../CustomerStatus/CustomerStatus";
 import { CustomerStatusLookup } from "../../constants/customer-status";
 import { deleteCustomer, updateCustomer } from "../../services/apiService";
 import useParamsStore from "../../stores/paramsStore";
-import CustomerPopup from "../../containers/CustomerPopup/CustomerPopup";
+import CustomerPopup from "../CustomerPopup/CustomerPopup";
 import styles from "./CustomerTable.module.css";
 import EditorCell from "../EditorCell/EditorCell";
 
@@ -120,7 +120,7 @@ const CustomerTable = ({ data, loading, onDataChanged }) => {
         title="Edit customer"
         open={isCustomerPopupOpen}
         onCancel={handleCancel}
-        onCreate={onUpdateCustomer}
+        onSubmit={onUpdateCustomer}
         values={selectedRowData}
       ></CustomerPopup>
     </>

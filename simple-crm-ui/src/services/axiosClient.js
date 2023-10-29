@@ -11,6 +11,8 @@ async function logout(){
   useAuthStore.getState().logout();
 }
 
+// Create client with custom settings.
+// Pass getCurrentAccessToken to get api token from app storage and include it in every request to backend.
 const axios = createAxiosClient({
   options: {
       baseURL: BASE_URL,

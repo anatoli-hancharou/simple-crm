@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getAllCustomers } from "../../services/apiService";
 import CustomerTable from "../../components/CustomerTable/CustomerTable";
-import CustomerToolbar from "../CustomerToolbar/CustomerToolbar";
+import CustomerToolbar from "../../components/CustomerToolbar/CustomerToolbar";
 import useAuthStore from "../../stores/authStore";
 import useNotificationStore from "../../stores/notificationStore";
 

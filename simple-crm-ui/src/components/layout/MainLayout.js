@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { UserOutlined, LineChartOutlined } from "@ant-design/icons";
-import { Layout, Menu, Button, Tooltip, theme, notification } from "antd";
+import { Layout, Menu, Button, Tooltip, notification } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useNavigation, Outlet, NavLink, useLocation } from "react-router-dom";
 import styles from "./Layout.module.css";
@@ -31,10 +31,6 @@ const renderMenuItems = () => {
 };
 
 const MainLayout = (props) => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
   const logout = useAuthStore((state) => state.logout);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 

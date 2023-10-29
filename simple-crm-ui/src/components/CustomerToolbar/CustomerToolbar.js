@@ -35,7 +35,7 @@ function CustomerToolbar({ onCustomerAdded }) {
         title="Add customer"
         open={isAddPopupOpen}
         onCancel={handleCancel}
-        onCreate={onCreateCustomer}
+        onSubmit={onCreateCustomer}
       ></CustomerPopup>
     </>
   );

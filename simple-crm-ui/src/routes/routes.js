@@ -16,6 +16,8 @@ import RootErrorBoundaryLayout from "../components/ErrorBoundary/RootErrorBounda
 const Routes = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
+      // Root element is the Error Boundary component that would intercept all errors appeared in it's children.
+      // Routes nested in the route with ProtectedRoute element are available for authorized users only.
       <Route element={<RootErrorBoundaryLayout />}>
         <Route path="/" element={<MainLayout />}>
           <Route

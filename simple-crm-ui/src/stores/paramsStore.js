@@ -9,6 +9,7 @@ const loadPreferences = (key) => {
   return storedValue ? JSON.parse(storedValue) : null;
 }
 
+// paramsStore keeps user preferences such as table sorting and filtering options to restore them on page reload.
 const useParamsStore = create((set, get) => ({
   tableParams: loadPreferences('user-preferences:table-params'),
   getParams: () => get().tableParams,

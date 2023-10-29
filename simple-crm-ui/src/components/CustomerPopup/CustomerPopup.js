@@ -1,5 +1,5 @@
 import { Modal, Form, Input, DatePicker, Select } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CustomerStatusLookup } from "../../constants/customer-status";
 import { PHONE_NUMBER_REGEX } from "../../constants/regex-constants";
 
@@ -16,6 +16,7 @@ const layout = {
 
 function CustomerPopup(props) {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     {
@@ -28,6 +29,7 @@ function CustomerPopup(props) {
       forceRender
       title={props.title}
       width={800}
+      confirmLoading={loading}
       open={props.open}
       onCancel={() => {
         props.onCancel();
@@ -37,17 +39,22 @@ function CustomerPopup(props) {
         form
           .validateFields()
           .then(async (values) => {
+            setLoading(true);
+            await props.onSubmit(values);
             form.resetFields();
-            await props.onCreate(values);
           })
           .catch((info) => {
             console.log("Validate Failed:", info);
+          })
+          .finally(() => {
+            setLoading(false);
           });
       }}
     >
       <Form
         {...layout}
         form={form}
+        disabled={loading}
         name={`${props.title.split(" ").join("_").toLowerCase()}`}
         size="middle"
       >
@@ -59,6 +66,10 @@ function CustomerPopup(props) {
               required: true,
               message: "Please input the name!",
             },
+            {
+              max: 250,
+              message: "Customer name shouldn't be longer than 250 symbols!",
+            }
           ]}
         >
           <Input />
@@ -87,6 +98,10 @@ function CustomerPopup(props) {
               required: true,
               message: "Please input the address!",
             },
+            {
+              max: 250,
+              message: "Address shouldn't be longer than 250 symbols!",
+            }
           ]}
         >
           <Input />
