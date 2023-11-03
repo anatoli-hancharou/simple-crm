@@ -43,6 +43,7 @@ const Customer = sequelize.define('Customer', {
   },
   userId: {
     type: Sequelize.INTEGER,
+    allowNull: false,
     references: {
       model: User,
       key: 'id',
@@ -56,6 +57,8 @@ User.hasMany(Customer, {
   foreignKey: 'userId',
   onDelete: 'CASCADE',
 });
-Customer.belongsTo(User);
+Customer.belongsTo(User, {
+  foreignKey: 'userId'
+});
 
 export default Customer;

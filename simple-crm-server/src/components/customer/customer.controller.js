@@ -15,7 +15,8 @@ class CustomerController {
       userId: req.user.user_id
     };
 
-    const createdCustomer = await this.customerService.addCustomer(customer);
+    let createdCustomer = await this.customerService.addCustomer(customer);
+    delete createdCustomer.dataValues.userId;
     return res.status(201).send(createdCustomer);
   };
 
